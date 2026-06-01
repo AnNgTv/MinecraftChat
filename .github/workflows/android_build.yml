@@ -15,20 +15,24 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Install Dependencies
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install Client Dependencies
         run: |
           cd client
           npm install
 
-      - name: Build Web Assets
+      - name: Build Web Assets (Vite)
         run: |
           cd client
-          # Try custom build first
-          node build.js
-          # Ensure dist directory has index.html
-          cp index.html dist/index.html
-          # Fix index.html path for capacitor (remove leading slash if needed)
-          sed -i 's/\/dist\/bundle.js/bundle.js/g' dist/index.html
+          # Revert index.html change temporarily for Vite build
+          sed -i 's/\/dist\/bundle.js/\/src\/main.tsx/g' index.html
+          npm run build
+          # Revert index.html back for local Termux use (just in case)
+          sed -i 's/\/src\/main.tsx/\/dist\/bundle.js/g' index.html
 
       - name: Capacitor Sync
         run: |
