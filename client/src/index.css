@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Minecraft';
+  src: url('https://fonts.cdnfonts.com/s/14885/Minecraftia-Regular.woff') format('woff');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  font-family: 'Minecraft', monospace;
+  overflow: hidden;
+}
+
+.mc-button {
+  background-color: #313131;
+  border: 4px solid #000000;
+  box-shadow: inset -4px -4px #1e1e1e, inset 4px 4px #555555;
+  color: #ffffff;
+  padding: 8px 16px;
+  text-shadow: 2px 2px #000000;
+  transition: all 0.1s;
+}
+
+.mc-button:hover {
+  background-color: #4a4a4a;
+}
+
+.mc-button:active {
+  box-shadow: inset 4px 4px #1e1e1e, inset -4px -4px #555555;
+  transform: translateY(2px);
+}
+
+.mc-input {
+  background-color: #000000;
+  border: 4px solid #313131;
+  color: #ffffff;
+  padding: 8px;
+  outline: none;
+}
+
+.mc-input:focus {
+  border-color: #ffffff;
+}

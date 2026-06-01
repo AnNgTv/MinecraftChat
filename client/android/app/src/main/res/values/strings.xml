@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MinecraftChat</string>
+    <string name="title_activity_main">MinecraftChat</string>
+    <string name="package_name">com.minecraftchat.app</string>
+    <string name="custom_url_scheme">com.minecraftchat.app</string>
+</resources>
