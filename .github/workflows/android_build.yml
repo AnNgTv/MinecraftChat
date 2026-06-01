@@ -6,17 +6,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -28,11 +28,7 @@ jobs:
       - name: Build Web Assets
         run: |
           cd client
-          # Skip type checking for faster and more reliable build on CI
-          npx vite build
-          # Ensure index.html is ready
-          cp index.html dist/index.html
-          sed -i 's/\/dist\/bundle.js/bundle.js/g' dist/index.html
+          npm run build
 
       - name: Capacitor Sync
         run: |
@@ -49,7 +45,7 @@ jobs:
           ./gradlew assembleDebug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: minecraft-chat-apk
           path: client/android/app/build/outputs/apk/debug/app-debug.apk
