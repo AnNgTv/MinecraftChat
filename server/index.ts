@@ -18,10 +18,15 @@ const io = new Server(server, {
 
 const botManager = new BotManager(io);
 
+io.on('connection_error', (err) => {
+  console.error('Socket.io connection error:', err);
+});
+
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
 
   socket.on('login', (data) => {
+    console.log('Login request received:', data);
     const { host, port, username, version, auth } = data;
     botManager.createBot(socket.id, { host, port, username, version, auth });
   });

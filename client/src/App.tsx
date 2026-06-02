@@ -27,7 +27,7 @@ const App: React.FC = () => {
     host: 'localhost',
     port: 25565,
     username: 'MinecraftChatBot',
-    version: '1.20.1',
+    version: 'Auto',
     auth: 'offline'
   });
 
@@ -43,12 +43,33 @@ const App: React.FC = () => {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3001');
+    const serverUrl = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001' 
+      : `${window.location.protocol}//${window.location.hostname}:3001`;
+    
+    console.log('Connecting to server:', serverUrl);
+    const newSocket = io(serverUrl);
     setSocket(newSocket);
 
+    newSocket.on('connect', () => {
+      console.log('Socket connected');
+      setStatus('Connected to Server');
+    });
+
+    newSocket.on('connect_error', (err) => {
+      console.error('Socket connection error:', err);
+      setStatus('Connection Error');
+    });
+
     newSocket.on('status', (data) => {
-      setStatus(data.state);
-      if (data.state === 'spawned') setConnected(true);
+      console.log('Status update received:', data);
+      if (data.state === 'loggedIn') setStatus(`Logged in as ${data.username || 'bot'}`);
+      else if (data.state === 'spawned') {
+        setStatus('Spawned in world');
+        setConnected(true);
+      }
+      else if (data.state === 'disconnected') setStatus('Disconnected');
+      else setStatus(data.state);
     });
 
     newSocket.on('chat', (msg) => {
@@ -72,6 +93,8 @@ const App: React.FC = () => {
     });
 
     newSocket.on('error', (err) => {
+      console.error('Bot error event:', err);
+      setStatus('Error: ' + err);
       alert('Error: ' + err);
     });
 
@@ -86,6 +109,11 @@ const App: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Login button pressed. Socket connected:', socket?.connected);
+    if (!socket?.connected) {
+      alert('Error: Not connected to the backend server. Please check if the server is running and accessible.');
+      return;
+    }
     socket?.emit('login', loginData);
     setStatus('Connecting...');
   };
