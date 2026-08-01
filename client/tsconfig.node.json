@@ -1,24 +1,23 @@
-{
-  "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "target": "es2023",
-    "lib": ["ES2023"],
-    "module": "esnext",
-    "types": ["node"],
-    "skipLibCheck": true,
+// Ví dụ logic kết nối trực tiếp qua Socket TCP trong Android
+import java.net.Socket;
+import java.io.OutputStream;
+import java.io.InputStream;
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-
-    /* Linting */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["vite.config.ts"]
+public void connectDirectToMinecraft(String serverIp, int port, String username) {
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                // Kết nối trực tiếp tới server Minecraft (Cổng mặc định là 25565)
+                Socket socket = new Socket(serverIp, port);
+                
+                // Tại đây bạn cần tự cài đặt bộ lọc gói tin (Packet Handshaking, Login) 
+                // theo giao thức của phiên bản Minecraft tương ứng.
+                
+                Log.d("DirectConnect", "Đã kết nối thành công tới server Minecraft!");
+            } catch (Exception e) {
+                Log.e("DirectConnect", "Lỗi kết nối trực tiếp: " + e.getMessage());
+            }
+        }
+    }).start();
 }
